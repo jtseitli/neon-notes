@@ -94,23 +94,81 @@ html, body {
 .profile-btn:hover {
   border-color: #0ff;
   color: #0ff;
-  transition: 0.2s ease;
+  transition: 0.3s ease;
 }
 
 
-/* for when cards exist later*/
 
-.neon-cyan {
+
+/* THEME COLORS */
+.theme-cyan {
+  border-color: #00ffff;
   box-shadow:
-    0 0 5px #0ff,
-    0 0 15px #0ff,
-    0 0 30px #0ff;
+    0 0 10px #00ffff,
+    0 0 25px #00ffff,
+    0 0 45px rgba(0, 255, 255, 0.9),
+    inset 0 0 14px rgba(0, 255, 255, 0.4);
+  transition: box-shadow 0.35s ease;
 }
 
-.neon-hover:hover {
-  filter: brightness(1.3);
-  transform: scale(1.03);
-  transition: 0.2s ease;
+.theme-pink {
+  border-color: #ff5ccf;
+  box-shadow:
+    0 0 10px #ff5ccf,
+    0 0 25px #ff5ccf,
+    0 0 45px rgba(255, 92, 207, 0.9),
+    inset 0 0 14px rgba(255, 92, 207, 0.4);
+  transition: box-shadow 0.35s ease;
+}
+
+.theme-purple {
+  border-color: #b066ff;
+  box-shadow:
+    0 0 10px #b066ff,
+    0 0 25px #b066ff,
+    0 0 45px rgba(176, 102, 255, 0.9),
+    inset 0 0 14px rgba(176, 102, 255, 0.4);
+  transition: box-shadow 0.35s ease;
+}
+
+.theme-lime {
+  border-color: #aaff00;
+  box-shadow:
+    0 0 10px #aaff00,
+    0 0 25px #aaff00,
+    0 0 45px rgba(170, 255, 0, 0.9),
+    inset 0 0 14px rgba(170, 255, 0, 0.4);
+  transition: box-shadow 0.35s ease;
+}
+
+.theme-yellow {
+  border-color: #ffe600;
+  box-shadow:
+    0 0 10px #ffe600,
+    0 0 25px #ffe600,
+    0 0 45px rgba(255, 230, 0, 0.9),
+    inset 0 0 14px rgba(255, 230, 0, 0.4);
+  transition: box-shadow 0.35s ease;
+}
+
+.theme-orange {
+  border-color: #ff9933;
+  box-shadow:
+    0 0 10px #ff9933,
+    0 0 25px #ff9933,
+    0 0 45px rgba(255, 153, 51, 0.9),
+    inset 0 0 14px rgba(255, 153, 51, 0.4);
+  transition: box-shadow 0.35s ease;
+}
+
+.theme-blue {
+  border-color: #0099ff;
+  box-shadow:
+    0 0 10px #0099ff,
+    0 0 25px #0099ff,
+    0 0 45px rgba(0, 153, 255, 0.9),
+    inset 0 0 14px rgba(0, 153, 255, 0.4);
+  transition: box-shadow 0.35s ease;
 }
 
 
@@ -163,20 +221,20 @@ html, body {
 }
 
 .note-card {
-  padding: 1.2rem;
-  border-radius: 14px;
-  background-color: #111622;
-  border: 2px solid rgba(0, 255, 255, 0.8);
-  box-shadow:
-    0 0 8px rgba(0, 255, 255, 0.7),
-    0 0 16px rgba(0, 255, 255, 0.5),
-    0 0 28px rgba(0, 255, 255, 0.35);
-  transition: 0.2s ease;
+  display: block;
+  padding: 1.25rem 1.5rem;
+  border-radius: 16px;
+  margin-top: 1.5rem;
+  background-color: #0b0f18;
+  color: #ffffff;
+  border: 2px solid transparent;
 }
 
-.note-card:hover {
-  filter: brightness(1.25);
-}
+  .neon-hover:hover {
+    transform: scale(1.03);
+    filter: brightness(1.25);
+    transition: 0.15s ease-in;
+  }
 
 .note-header {
   display: flex;
@@ -207,7 +265,7 @@ html, body {
   border-radius: 50%;
   font-size: 1.4rem;
   font-weight: 700;
-  color: #00ffff;
+  color: #00ff8c;
   border: 2px solid #13ff7d;
   background: rgba(0, 0, 0, 0.3);
   box-shadow:
@@ -222,3 +280,95 @@ html, body {
   filter: brightness(1.7);
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.delete-btn {
+  padding: 0.7rem 1.2rem;
+  border-radius: 10px;
+  color: #ff4f6a;
+  border: 2px solid #ff4f6a;
+  background: rgba(255, 0, 70, 0.1);
+  cursor: pointer;
+  font-weight: 600;
+  text-shadow: 0 0 4px #ff4f6a;
+
+  box-shadow:
+    0 0 6px #ff4f6a,
+    0 0 15px rgba(255, 79, 106, 0.7),
+    inset 0 0 12px rgba(255, 79, 106, 0.3);
+  transition: 0.2s ease;
+}
+
+.delete-btn:hover {
+  box-shadow:
+    0 0 12px #ff4f6a,
+    0 0 25px rgba(255, 79, 106, 0.9),
+    inset 0 0 20px rgba(255, 79, 106, 0.5);
+  filter: brightness(1.3);
+}
+
+
+.pin-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.pin-toggle input {
+  transform: scale(1.3);
+  cursor: pointer;
+}
+
+/* PINNED SECTION */
+
+.pinned-wrapper {
+  border: 2px solid #ffffff;
+  border-radius: 20px;
+  padding: 1.5rem 2rem 3rem;
+  margin-top: 3rem;
+  margin-bottom: 3.5rem;
+  box-shadow:
+    0 0 10px #c3c3c3,
+    0 0 25px rgba(228, 228, 228, 0.7),
+    inset 0 0 12px rgba(255, 255, 255, 0.3);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pinned-section {
+  margin-top: 3rem;
+  margin-bottom: 3.5rem;
+}
+
+
+.pinned-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 4rem;
+  max-width: 1100px;   
+  margin: 0 auto;    
+}
+
+.pinned-section .note-card {
+  transform: scale(1.04);
+  transition: all 0.25s ease;
+}
+
+.pinned-title {
+  font-size: 1.45rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.other-notes-title {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
