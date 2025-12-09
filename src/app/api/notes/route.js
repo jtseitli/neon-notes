@@ -5,7 +5,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-// get all notes for logged-in user OR single note if ?id=
+// GET – all notes for logged-in user OR single note if ?id=
 export async function GET(request) {
   try {
     const session = await getServerSession(authOptions);
@@ -17,7 +17,7 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const idParam = searchParams.get("id");
 
-    // Return a single note (if it belongs to the user)
+    // Single note (ensure ownership)
     if (idParam) {
       const note = await prisma.note.findFirst({
         where: {
@@ -29,23 +29,30 @@ export async function GET(request) {
       return Response.json(note ? [note] : [], { status: 200 });
     }
 
-    // Return all user's notes
+    // All notes for this user, ordered by:
+    // 1) pinned desc (pinned on top)
+    // 2) order asc (our manual ordering)
+    // 3) createdAt desc (stable fallback)
     const notes = await prisma.note.findMany({
       where: { userId: session.user.id },
       orderBy: [
         { pinned: "desc" },
+        { order: "asc" },
         { createdAt: "desc" },
       ],
     });
 
     return Response.json(notes, { status: 200 });
-
   } catch (error) {
     console.error(error);
-    return Response.json({ error: "Failed to retrieve notes" }, { status: 500 });
+    return Response.json(
+      { error: "Failed to retrieve notes" },
+      { status: 500 }
+    );
   }
 }
 
+// POST – create note for current user
 export async function POST(request) {
   try {
     const session = await getServerSession(authOptions);
@@ -62,7 +69,7 @@ export async function POST(request) {
         content: body.content,
         theme: body.theme || null,
         pinned: body.pinned || false,
-        order: body.order || null,
+        order: body.order ?? null,
         userId: session.user.id,
       },
     });
@@ -70,10 +77,14 @@ export async function POST(request) {
     return Response.json(newNote, { status: 201 });
   } catch (error) {
     console.error("POST ERROR:", error);
-    return Response.json({ error: "Failed to create note" }, { status: 500 });
+    return Response.json(
+      { error: "Failed to create note" },
+      { status: 500 }
+    );
   }
 }
 
+// PATCH – update note (only if user owns it)
 export async function PATCH(request) {
   try {
     const session = await getServerSession(authOptions);
@@ -84,7 +95,6 @@ export async function PATCH(request) {
     const body = await request.json();
     const { id, ...updates } = body;
 
-    // Make sure user owns the note
     const existing = await prisma.note.findFirst({
       where: { id, userId: session.user.id },
     });
@@ -99,13 +109,13 @@ export async function PATCH(request) {
     });
 
     return Response.json(updated, { status: 200 });
-
   } catch (error) {
     console.error("PATCH ERROR:", error);
     return Response.json({ error: "Update failed" }, { status: 500 });
   }
 }
 
+// DELETE – delete note (only if user owns it)
 export async function DELETE(request) {
   try {
     const session = await getServerSession(authOptions);
@@ -116,7 +126,6 @@ export async function DELETE(request) {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
 
-    // Make sure user owns the note
     const existing = await prisma.note.findFirst({
       where: { id, userId: session.user.id },
     });
